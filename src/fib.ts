@@ -1,14 +1,18 @@
 // src/fib.ts
+// Typed utility function to compute Fibonacci numbers
+
 export default function fibonacci(n: number): number {
   if (!Number.isInteger(n) || n < 0) return -1;
-  if (n === 0) return 0;
-  if (n === 1) return 1;
 
-  let a = 0, b = 1;
-  for (let i = 2; i <= n; i++) {
-    const c = a + b;
+  // Iterative implementation avoids recursion depth issues
+  let a = 0;
+  let b = 1;
+
+  for (let i = 0; i < n; i++) {
+    const next: number = a + b;
     a = b;
-    b = c;
+    b = next;
   }
-  return b;
+
+  return a;
 }
