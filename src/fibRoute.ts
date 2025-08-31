@@ -4,16 +4,12 @@ import { Request, Response } from "express";
 import fibonacci from "./fib";
 
 type RouteParams = { num?: string };
-
-// Make req typed so req.params isn't any
-interface ReqWithNum extends Request {
-  params: RouteParams;
-}
+interface ReqWithNum extends Request { params: RouteParams; }
 
 export default (req: ReqWithNum, res: Response) => {
   const raw = req.params.num;
 
-  // Allow negative or non-negative integers: -?\d+
+  // accept integers incl. negatives: -?\d+
   if (typeof raw !== "string" || !/^-?\d+$/.test(raw)) {
     return res
       .status(400)
@@ -21,8 +17,8 @@ export default (req: ReqWithNum, res: Response) => {
   }
 
   const n = parseInt(raw, 10);
-
   const fibN = fibonacci(n);
+
   const result =
     fibN < 0 ? `fibonacci(${n}) is undefined` : `fibonacci(${n}) is ${fibN}`;
 
