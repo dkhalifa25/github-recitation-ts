@@ -1,6 +1,6 @@
 // src/fib.ts
-function fibonacci(n: number): number {
-  if (!Number.isInteger(n) || n < 0) return -1; // undefined sentinel used elsewhere
+export default function fibonacci(n: number): number {
+  if (!Number.isInteger(n) || n < 0) return -1;
   if (n === 0) return 0;
   if (n === 1) return 1;
 
@@ -12,5 +12,3 @@ function fibonacci(n: number): number {
   }
   return b;
 }
-
-export = fibonacci; // compatible with: const fibonacci = require("./fib");
