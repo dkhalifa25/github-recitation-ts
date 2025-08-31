@@ -1,16 +1,30 @@
+// src/fibRoute.ts
 // Endpoint for querying the fibonacci numbers
+import { Request, Response } from "express";
+import fibonacci from "./fib";
 
-const fibonacci = require("./fib");
+type RouteParams = { num?: string };
 
-export default (req, res) => {
-  const { num } = req.params;
+// Make req typed so req.params isn't any
+interface ReqWithNum extends Request {
+  params: RouteParams;
+}
 
-  const fibN = fibonacci(parseInt(num));
-  let result = `fibonacci(${num}) is ${fibN}`;
+export default (req: ReqWithNum, res: Response) => {
+  const raw = req.params.num;
 
-  if (fibN < 0) {
-    result = `fibonacci(${num}) is undefined`;
+  // Allow negative or non-negative integers: -?\d+
+  if (typeof raw !== "string" || !/^-?\d+$/.test(raw)) {
+    return res
+      .status(400)
+      .send("`num` must be an integer in the path, e.g. /fib/8 or /fib/-2");
   }
 
-  res.send(result);
+  const n = parseInt(raw, 10);
+
+  const fibN = fibonacci(n);
+  const result =
+    fibN < 0 ? `fibonacci(${n}) is undefined` : `fibonacci(${n}) is ${fibN}`;
+
+  return res.send(result);
 };
